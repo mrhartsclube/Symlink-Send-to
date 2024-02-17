@@ -1,5 +1,8 @@
+import os
+import sys
 import tkinter as tk
 from tkinter import filedialog
+import time
 
 def create_symlink(source, destination, is_directory):
     """
@@ -11,8 +14,11 @@ def create_symlink(source, destination, is_directory):
         else:
             os.system(f'mklink "{destination}" "{source}"')
         print(f"Symlink created successfully: {destination} -> {source}")
+        time.sleep(2)  # Keep the console open for 2 seconds after successful job
     except Exception as e:
         print(f"Error creating symlink: {e}")
+        input("Press Enter to exit...")  # Wait for user input after error
+        sys.exit(1)
 
 def main():
     # Create Tkinter root window for the file dialog
@@ -23,6 +29,7 @@ def main():
     destination_folder = filedialog.askdirectory(title="Select Destination Folder")
     if not destination_folder:
         print("No destination folder selected. Exiting.")
+        time.sleep(2)  # Keep the console open for 2 seconds before exiting
         sys.exit()
 
     # Process files/folders passed as arguments
@@ -35,6 +42,8 @@ def main():
             create_symlink(arg, destination_path, is_directory)
         else:
             print(f"Invalid file/folder path: {arg}")
+            input("Press Enter to exit...")  # Wait for user input after error
+            sys.exit(1)
 
 if __name__ == "__main__":
     main()
